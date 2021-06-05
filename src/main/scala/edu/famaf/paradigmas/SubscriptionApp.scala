@@ -20,7 +20,11 @@ object SubscriptionApp extends App {
     maxUptime: Int = 10
   )
 
-  private def readSubscriptions(filename: String): List[Subscription] = ???
+  private def readSubscriptions(filename: String): List[Subscription] = {
+    println(s"Reading subscriptions from ${filename}")
+    val jsonContent = Source.fromFile(filename)
+    (parse(jsonContent.mkString)).extract[List[Subscription]]
+  }
 
   val builder = OParser.builder[Config]
   val argsParser = {
@@ -41,6 +45,8 @@ object SubscriptionApp extends App {
   OParser.parse(argsParser, args, Config()) match {
     case Some(config) =>
       val system = ActorSystem[Supervisor.SupervisorCommand](Supervisor(), "subscription-app")
+      val readSubs = readSubscriptions(config.input)
+      readSubs.foreach{x => system ! Supervisor.JsonSubs(x.name,x.feeds,x.url)}
       Thread.sleep(config.maxUptime * 1000)
       system ! Supervisor.Stop()
     case _ => ???
