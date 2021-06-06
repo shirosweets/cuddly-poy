@@ -44,13 +44,13 @@ class Site(context: ActorContext[Site.SiteCommands_Request])
       case New_Subcription(url,url_Type,feeds) =>
         // Remplazamos los feeds, y guardamos los datos en una tripla.
         feeds.foreach{feed => urls =
-          (word.replaceFirstIn(url,feed), feed, url_Type) :: urls}
+          (word.replaceFirstIn(url, feed), feed, url_Type) :: urls}
 
         // Creamos los actores feeds necesarios y enviamos la información
         // de la url y la url_Type al actor Feed.
         urls.foreach{feed => val new_feed =
           context.spawn(Feed(), s"New_Feed_${feed_list.length}:${feed._2}")
-          new_feed ! Feed.New_Url(feed._1,feed._3)
+          new_feed ! Feed.New_Url(feed._1, feed._3)
           feed_list = (new_feed, feed._2) :: feed_list}
         Behaviors.same
       case Get_Feed(feed) =>

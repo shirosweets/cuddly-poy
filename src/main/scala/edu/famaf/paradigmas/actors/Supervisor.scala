@@ -31,8 +31,8 @@ class Supervisor(context: ActorContext[Supervisor.SupervisorCommand])
 
   override def onMessage(msg: SupervisorCommand): Behavior[SupervisorCommand] = {
     msg match {
-      case JsonSubs(name,feeds,url,url_Type) =>
-        val new_site = context.spawn(Site(),s"New_Sub_${site_list.length}:${name}")
+      case JsonSubs(name, feeds, url, url_Type) =>
+        val new_site = context.spawn(Site(), s"New_Sub_${site_list.length}:${name}")
 
         // Para llevar la cuenta de los sitios que me suscribi
         site_list = new_site :: site_list

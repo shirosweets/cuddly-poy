@@ -29,7 +29,7 @@ class Feed(context: ActorContext[Feed.FeedCommands_Request])
   import Feed._
 
   // Variable para guardar la url y el tipo.
-  var url_t: (String,String) = ("","")
+  var url_t: (String, String) = ("", "")
   override def onMessage(msg: FeedCommands_Request): Behavior[FeedCommands_Request] = {
     msg match {
       // Creamos una tupla donde guardaremos la informacion de la url.

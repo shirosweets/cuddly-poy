@@ -45,7 +45,7 @@ class REDDIT_Parse extends URL_R {
         response match {
             case "" => Seq()
             case _ => val result = (parse(response) \ "data" \ "children" \ "data")
-                         .extract[List[Map[String, Any]]]
+                        .extract[List[Map[String, Any]]]
                     // Parsear JSON
                     val filterContent = result.flatten.filter{case (v , _) => v == "title" || v == "selftext" }.map(x => x._2.toString)
                     val pattern = "(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]".r
