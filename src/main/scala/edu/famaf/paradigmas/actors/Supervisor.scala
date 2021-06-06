@@ -40,11 +40,6 @@ class Supervisor(context: ActorContext[Supervisor.SupervisorCommand])
         //Envio la informacion necesaria para la subscripcion
         new_site ! Site.New_Subcription(url, url_Type, feeds)
 
-        // Pido un feed en particular(Para probar)
-        new_site ! Site.Get_Feed(feeds.head)
-
-        // Pido todos los feeds del sitio
-        new_site ! Site.Get_All_Feeds()
         Behaviors.same
       case Stop() => Behaviors.stopped
     }

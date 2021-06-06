@@ -2,6 +2,7 @@
 
 - [x] Consigna 1
 - [x] Consigna 2
+    - [ ] Revisar
 - [ ] Consigna 3
 - [ ] Consigna 4
 - [ ] Consigna 5

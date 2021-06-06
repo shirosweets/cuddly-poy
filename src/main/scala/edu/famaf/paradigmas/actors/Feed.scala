@@ -15,11 +15,10 @@ object Feed {
 
   /* Mensajes de Feed */
   sealed trait FeedCommands_Request
-  final case class New_Url(url: String, url_Type: String) extends FeedCommands_Request
-  final case class Get_Feed_Parsed() extends FeedCommands_Request
+  final case class Give_Parse(replyTo: ActorRef[Response_Feed], data: (String, String, String)) extends FeedCommands_Request
 
   sealed trait FeedCommands_Response
-  final case class Send_Feed_Parsed() extends FeedCommands_Response
+  final case class Response_Feed(message: String) extends FeedCommands_Response
 }
 
 class Feed(context: ActorContext[Feed.FeedCommands_Request])
@@ -28,25 +27,19 @@ class Feed(context: ActorContext[Feed.FeedCommands_Request])
 
   import Feed._
 
-  // Variable para guardar la url y el tipo.
-  var url_t: (String, String) = ("", "")
   override def onMessage(msg: FeedCommands_Request): Behavior[FeedCommands_Request] = {
     msg match {
       // Creamos una tupla donde guardaremos la informacion de la url.
-      case New_Url(url, url_Type) => url_t = (url, url_Type)
-        //println(s"Mi url:${url_t}")
-        Behaviors.same
-      case Get_Feed_Parsed() =>
+      case Give_Parse(replyTo, data) =>
         var feed: String = ""
-
-        // Dependiendo el tipo de url, creamos un parse.
-        url_t._2 match {
+        //
+        data._3 match {
           case "rss" => val url_to_parse = new RSS_Parse
-            feed = url_to_parse.parser(url_t._1).mkString(" ")
+            feed = url_to_parse.parser(data._1).mkString(" ")
           case "reddit" => val url_to_parse = new REDDIT_Parse
-            feed = url_to_parse.parser(url_t._1).mkString(" ")
+            feed = url_to_parse.parser(data._1).mkString(" ")
         }
-        context.log.info(feed)
+        replyTo ! Response_Feed(feed)
         Behaviors.same
     }
   }
