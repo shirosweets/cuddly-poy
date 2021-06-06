@@ -2,11 +2,13 @@
     {
         "url": "https://www.chicagotribune.com/arcio/rss/category/%s/",
         "feeds": ["business"],
-        "name": "chicagotribune"
+        "name": "chicagotribune",
+        "url_Type": "rss"
     },
     {
         "url": "https://rss.nytimes.com/services/xml/rss/nyt/%s.xml",
         "feeds": ["Business", "Technology"],
-        "name": "nytimes"
+        "name": "nytimes",
+        "url_Type": "rss"
     }
 ]
