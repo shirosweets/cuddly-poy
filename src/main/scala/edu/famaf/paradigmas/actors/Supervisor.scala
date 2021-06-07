@@ -38,7 +38,8 @@ class Supervisor(context: ActorContext[Supervisor.SupervisorCommand])
         site_list = new_site :: site_list
 
         //Envio la informacion necesaria para la subscripcion
-        new_site ! Site.New_Subcription(url, url_Type, feeds)
+        new_site ! Site.GetFeeds(url, url_Type, feeds)
+        new_site ! Site.GetFeed(url, url_Type, feeds.head)
 
         Behaviors.same
       case Stop() => Behaviors.stopped
