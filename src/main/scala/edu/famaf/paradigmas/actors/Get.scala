@@ -2,8 +2,6 @@ package edu.famaf.paradigmas
 
 import scalaj.http.{Http, HttpResponse}
 import scala.xml.XML
-
-
 import org.json4s.JsonDSL._
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
@@ -14,7 +12,9 @@ abstract class URL_R{
     //Request HTTP
     def get_body(url: String): String = {
         try {
-            Http(url).timeout(connTimeoutMs = 2000, readTimeoutMs = 5000).asString.body
+            Http(url).timeout(
+                connTimeoutMs = 2000,
+                readTimeoutMs = 5000).asString.body
         }
         catch{
             case e: Exception => ""

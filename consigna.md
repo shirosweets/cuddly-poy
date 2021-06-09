@@ -23,6 +23,7 @@
   - [Quinta parte: Investigación](#quinta-parte-investigación)
 - [Puntos estrella](#puntos-estrella)
   - [Suscripción a Reddit/JSON*](#suscripción-a-redditjson)
+  - [Conteo de Entidades Nombradas*](#conteo-de-entidades-nombradas)
   - [Guardar datos a disco**](#guardar-datos-a-disco)
   - [Espera de proceso de datos**](#espera-de-proceso-de-datos)
   - [Conexión con el mundo exterior vía REST API***](#conexión-con-el-mundo-exterior-vía-rest-api)
@@ -121,7 +122,7 @@ La quinta parte no es de implementación sino de investigación. Se dejarán una
 # Puntos estrella
 ## Suscripción a Reddit/JSON*
 Una extensión sencilla es la de permitir a la aplicación soportar suscripciones a Reddit/JSON como se vio en el laboratorio 2. Para este punto estrella deberán agregar el soporte a suscripciones a subreddits mediante la API correspondiente (la misma utilizada en el laboratorio 2). Deberán modificar todos los protocolos que consideren necesarios y convenientes y detallar dichos cambios en el informe.
-Conteo de Entidades Nombradas*
+## Conteo de Entidades Nombradas*
 Utilizando el modelo sencillo de captura de entidades nombradas del laboratorio anterior, modificar la arquitectura y los protocolos para que se haga el conteo de entidades nombradas y posterior logging de dicho conteo. Se debe minimizar la cantidad de veces que se llama al modelo, para simular la situación en la que cargar y ejecutar un modelo consume muchos recursos.
 
 ## Guardar datos a disco**

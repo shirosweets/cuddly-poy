@@ -8,12 +8,18 @@ import org.slf4j.{Logger, LoggerFactory}
 import scala.io._
 import scopt.OParser
 
+
+
 object SubscriptionApp extends App {
   implicit val formats = DefaultFormats
 
   val logger: Logger = LoggerFactory.getLogger("edu.famaf.paradigmas.SubscriptionApp")
 
-  case class Subscription(name: String, feeds: List[String], url: String, url_Type: String)
+  case class Subscription(
+    name: String,
+    feeds: List[String],
+    url: String,
+    url_Type: String)
 
   case class Config(
     input: String = "",
@@ -46,7 +52,12 @@ object SubscriptionApp extends App {
     case Some(config) =>
       val system = ActorSystem[Supervisor.SupervisorCommand](Supervisor(), "subscription-app")
       val readSubs = readSubscriptions(config.input)
-      readSubs.foreach{x => system ! Supervisor.JsonSubs(x.name,x.feeds,x.url,x.url_Type)}
+      readSubs.foreach{x =>
+        system ! Supervisor.JsonSubs(
+          x.name,
+          x.feeds,
+          x.url,
+          x.url_Type)}
       Thread.sleep(config.maxUptime * 1000)
       system ! Supervisor.Stop()
     case _ => ???

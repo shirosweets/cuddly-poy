@@ -1,13 +1,27 @@
-# Consignas
+# Consignas y tareas a realizar
 
+- [x] Configuración de `tabs = 2 espacios`
+- [x] Añadir la extensión de [lint de Scala](https://marketplace.visualstudio.com/items?itemName=scalameta.metals)
 - [x] Consigna 1
+  - [x] Arreglar estilo del código
 - [x] Consigna 2
-    - [ ] Revisar
-- [ ] Consigna 3
-- [ ] Consigna 4
-- [ ] Consigna 5
+    - [x] Revisar
+    - [x] Plantear una nueva arquitectura
+    - [x] Agregar diagrama de la nueva arquitectura
+- [x] Consigna 3
+  - [ ] Revisar
+- [x] Consigna 4
+  - [ ] Revisar
+  - [x] Validar si es necesario cambiar `Give_Parse` a `GiveToParse`, de ser así, cambiarlo
+  - [x] Validar si es necesario cambiar `Feed_Receive` a `SendFeed`, de ser así, cambiarlo
+- [x] Consigna 5
+- [ ] Encontrar método para validación de los mensajes
 - Puntos estrella
-    - [ ] Suscripción a Reddit/JSON*
+    - [x] Suscripción a Reddit/JSON*
+    - [ ] Conteo de Entidades Nombradas*
     - [ ] Guardar datos a disco**
     - [ ] Espera de proceso de datos**
     - [ ] Conexión con el mundo exterior vía REST API***
+- [x] Redactar el informe
+  - [x] Añadir las imágenes de las arquitecturas
+  - [x] Explicar los problemas con la/las arquitectura
