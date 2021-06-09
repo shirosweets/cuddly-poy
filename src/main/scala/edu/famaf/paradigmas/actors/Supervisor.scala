@@ -15,8 +15,14 @@ object Supervisor {
 
   /* Mensajes Supervisor*/
   sealed trait SupervisorCommand
-  final case class JsonSubs(name: String, feeds: List[String], url: String, url_Type: String)
+  final case class JsonSubs(
+    name: String,
+    feeds: List[String],
+    url: String,
+    url_Type: String)
     extends SupervisorCommand
+
+  final case class Feed_Receive(feed: String) extends SupervisorCommand
   final case class Stop() extends SupervisorCommand
 }
 
@@ -28,19 +34,24 @@ class Supervisor(context: ActorContext[Supervisor.SupervisorCommand])
 
   // Variable para llevar informacion de las subscripciones
   var site_list :List[ActorRef[Site.SiteCommands_Request]] = List()
+  var feeds_list: List[String] = List()
 
   override def onMessage(msg: SupervisorCommand): Behavior[SupervisorCommand] = {
     msg match {
       case JsonSubs(name, feeds, url, url_Type) =>
-        val new_site = context.spawn(Site(), s"New_Sub_${site_list.length}:${name}")
+        val new_site = context.spawn(
+          Site(), s"New_Sub_${site_list.length}:${name}")
 
-        // Para llevar la cuenta de los sitios que me suscribi
+        // Para llevar la cuenta de los sitios que me suscribí
         site_list = new_site :: site_list
 
-        //Envio la informacion necesaria para la subscripcion
-        new_site ! Site.GetFeeds(url, url_Type, feeds)
-        new_site ! Site.GetFeed(url, url_Type, feeds.head)
+        // Pide los Feeds al Site
+        new_site ! Site.GetFeeds(url, url_Type, feeds, context.self)
 
+        Behaviors.same
+      case Feed_Receive(feed) =>
+        feeds_list = feed :: feeds_list
+        context.log.info("Feed[item:{}]: {}",feeds_list.length,feed)
         Behaviors.same
       case Stop() => Behaviors.stopped
     }

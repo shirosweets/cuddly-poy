@@ -15,11 +15,11 @@ object Request_Parse {
 
   /* Mensajes de Request_Parse */
   sealed trait FeedCommands_Request
-  final case class Give_Parse(replyTo: ActorRef[Response_Feed], url: String, url_Type: String) 
-    extends FeedCommands_Request
-
-  sealed trait FeedCommands_Response
-  final case class Response_Feed(message: String) extends FeedCommands_Response
+  final case class Give_Parse(
+    url: String,
+    url_Type: String,
+    supervisor_ref: ActorRef[Supervisor.SupervisorCommand])
+      extends FeedCommands_Request
 }
 
 class Request_Parse(context: ActorContext[Request_Parse.FeedCommands_Request])
@@ -31,7 +31,7 @@ class Request_Parse(context: ActorContext[Request_Parse.FeedCommands_Request])
   override def onMessage(msg: FeedCommands_Request): Behavior[FeedCommands_Request] = {
     msg match {
       // Creamos una tupla donde guardaremos la informacion de la url.
-      case Give_Parse(replyTo, url, url_Type) =>
+      case Give_Parse(url, url_Type, supervisor_ref) =>
         var feed: String = ""
         //
         url_Type match {
@@ -40,7 +40,7 @@ class Request_Parse(context: ActorContext[Request_Parse.FeedCommands_Request])
           case "reddit" => val url_to_parse = new REDDIT_Parse
             feed = url_to_parse.parser(url).mkString(" ")
         }
-        replyTo ! Response_Feed(feed)
+        supervisor_ref ! Supervisor.Feed_Receive(feed)
         Behaviors.same
     }
   }
