@@ -52,3 +52,6 @@ Thumbs.db
 .metals/
 .vscode/
 .bsp/
+
+# Instructions to group
+guide.md
