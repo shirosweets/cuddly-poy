@@ -34,6 +34,6 @@
 - [x] Redactar el informe
   - [x] Añadir las imágenes de las arquitecturas
   - [x] Explicar los problemas con la/las arquitectura
-- [ ] Añadir la tag a la branch de `master`
-  - [ ] git tag -a lab-3 -m "Entrega Laboratorio 3"
+- [x] Añadir la tag a la branch de `master`
+  - [x] git tag -a lab-3 -m "Entrega Laboratorio 3"
 - [-] Añadir branches para los puntos estrellas
