@@ -1,15 +1,13 @@
 package edu.famaf.paradigmas
 
+import akka.actor.typed.Signal
 import akka.actor.typed.ActorRef
 import akka.actor.typed.Behavior
 import akka.actor.typed.PostStop
-import akka.actor.typed.Signal
-import akka.actor.typed.scaladsl.ActorContext
-import akka.actor.typed.scaladsl.AbstractBehavior
 import akka.actor.typed.scaladsl.Behaviors
 import akka.actor.typed.scaladsl.LoggerOps
-
-
+import akka.actor.typed.scaladsl.ActorContext
+import akka.actor.typed.scaladsl.AbstractBehavior
 
 object Site {
   def apply(): Behavior[SiteCommands_Request] =
@@ -22,8 +20,7 @@ object Site {
     url_Type: String,
     feeds: List[String],
     supervisor_ref: ActorRef[Supervisor.SupervisorCommand])
-      extends SiteCommands_Request
-
+    extends SiteCommands_Request
 
 }
 
@@ -36,7 +33,7 @@ class Site(context: ActorContext[Site.SiteCommands_Request])
   var word = "%s".r
 
   // Variable para llevar registro de los feeds
-  var feed_list :List[(ActorRef[Request_Parse.FeedCommands_Request])] = List()
+  var feed_list :List[(ActorRef[RequestParse.FeedCommands_Request])] = List()
 
   override def onMessage(msg: SiteCommands_Request):
     Behavior[SiteCommands_Request] = {
@@ -45,14 +42,19 @@ class Site(context: ActorContext[Site.SiteCommands_Request])
     msg match {
       case GetFeeds(url, url_Type, feeds, supervisor_ref) =>
         // Remplazamos los feeds, y guardamos los datos en una tripla.
-        feeds.foreach{data => urls =
-          (word.replaceFirstIn(url, data), data, url_Type) :: urls}
+        if (feeds != Nil){
+          feeds.foreach{data =>
+            urls = (word.replaceFirstIn(url, data), data, url_Type) :: urls}
+        }
+        else{urls = (url, "", url_Type) :: urls}
         // Creamos los actores feeds necesarios y enviamos la información
-        // de la url y la url_Type al actor Request_Parse.
-        urls.foreach{data => val new_Request_Parse =
-          context.spawn(Request_Parse(), s"New_Request_Parse:_${feed_list.length}:${data._2}")
-          new_Request_Parse ! Request_Parse.Give_Parse(data._1, data._3, supervisor_ref)
-          feed_list = new_Request_Parse :: feed_list
+        // de la url y la url_Type al actor RequestParse.
+        urls.foreach{data => val new_RequestParse =
+          context.spawn(RequestParse(),
+            s"New_RequestParse:_${feed_list.length}:${data._2}")
+          new_RequestParse ! RequestParse.GiveToParse(
+            data._1, data._3, supervisor_ref)
+          feed_list = new_RequestParse :: feed_list
         }
         Behaviors.same
     }

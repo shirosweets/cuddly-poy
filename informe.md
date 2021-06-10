@@ -6,6 +6,7 @@
 # Contenido
 - [Alumnos](#alumnos)
 - [Contenido](#contenido)
+- [Importante](#importante)
   - [1. Primera parte: Diseñando la arquitectura](#1-primera-parte-diseñando-la-arquitectura)
   - [3. Tercera parte: Request-Response](#3-tercera-parte-request-response)
       - [Respuesta 1](#respuesta-1)
@@ -16,8 +17,13 @@
       - [Respuesta 3](#respuesta-3)
       - [Respuesta 4](#respuesta-4)
 - [Extra: nuestra forma de trabajar](#extra-nuestra-forma-de-trabajar)
+  - [Cómo correrlo](#cómo-correrlo)
 
 ---
+# Importante
+No quisimos crear una branch aparte para el punto estrella **Suscripción a Reddit/JSON*** porque era muy poco código.
+Para probarlo añadimos un `subscriptions2.json` con una url="reddit" y las rss anteriores.
+
 ## 1. Primera parte: Diseñando la arquitectura
 Diseño inicial de la arquitectura (ver en navegador por las dudas):
 <p align="center">
@@ -92,7 +98,7 @@ Este comportamiento es necesario porque necesitamos crear por cada *sitio* un *a
 #### Respuesta 1
 Para extender el sistema para soportar el conteo de entidades se debería modificar de la arquitectura lo siguiente:
 
-Creariamos un nuevo actor `CountEntity` dentro del actor `RequestParse`, cada vez que se parsea una *url*. Este nuevo actor se encargaría de contar las entidades nombradas y luego enviar los resultados al `Supervisor`, quien unificaria todas las entidades en una unica lista.
+Creariamos un nuevo actor `CountEntity` dentro del actor `RequestParse`, cada vez que se parsea una *url*. Este nuevo actor se encargaría de contar las entidades nombradas y luego enviar los resultados al `Supervisor`, quien unificaría todas las entidades en una única lista.
 
 1. Si quisieran exportar los datos (ítems) de las suscripciones a archivos de texto (en lugar de imprimirlas por pantalla):
 > 2.1. ¿Qué tipo de [patrón de interacción](https://doc.akka.io/docs/akka/current/typed/interaction-patterns.html#interaction-patterns) creen que les serviría y por qué? (hint: es mejor acumular todo los items antes de guardar nada).
@@ -121,7 +127,7 @@ Los problemas que presenta implementarlo de manera síncrona son:
 Nos asegura que el sistema no va a bloquearse, a diferencia de semáforo/mutex.
 Se diferencia del semáforo/mutex porque usa mensajes para la concurrencia.
 
-El modelo de actor opera con el paso de mensajes. Los procesos individuales (actores) pueden enviarse mensajes de forma asincrónica entre sí. No existen estados compartidos, ya que cada actor trabaja de manera independiente, por lo que el fallo de uno en el sistema, no afectaría al resto. (En el sentido de que el sistema puede seguir funcionando.)
+El modelo de actor opera con el pasaje de mensajes. Los procesos individuales (actores) pueden enviarse mensajes de forma asincrónica entre sí. No existen estados compartidos, ya que cada actor trabaja de manera independiente, por lo que el fallo de uno en el sistema, no afectaría al resto. (En el sentido de que el sistema puede seguir funcionando.)
 
 ---
 # Extra: nuestra forma de trabajar
@@ -136,3 +142,21 @@ Proceso:
 5. Testearla en los casos necesarios
 6. Si funciona, commitearla, sino explicar por qué no funcionó a los demás integrantes
 7. Documentarla en un archivo `.txt` en caso de ser necesario (implementación rebuscada o implementación fuera de la idea tomada)
+
+## Cómo correrlo
+
+Forma 1:
+
+sbt "run --input ./subscriptions.json"
+
+Forma 2:
+
+sbt
+
+compile
+
+run --input ./subscriptions.json
+
+Punto estrella 1:
+
+run --input ./subscriptions2.json

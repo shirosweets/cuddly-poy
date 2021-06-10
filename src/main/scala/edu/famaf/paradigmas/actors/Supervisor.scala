@@ -9,8 +9,6 @@ import akka.actor.typed.scaladsl.AbstractBehavior
 import akka.actor.typed.scaladsl.Behaviors
 import akka.actor.typed.scaladsl.LoggerOps
 
-
-
 object Supervisor {
   def apply(): Behavior[SupervisorCommand] =
     Behaviors.setup(context => new Supervisor(context))
@@ -24,7 +22,7 @@ object Supervisor {
     url_Type: String)
     extends SupervisorCommand
 
-  final case class Feed_Receive(feed: String) extends SupervisorCommand
+  final case class SendFeed(feed: String) extends SupervisorCommand
   final case class Stop() extends SupervisorCommand
 }
 
@@ -38,7 +36,8 @@ class Supervisor(context: ActorContext[Supervisor.SupervisorCommand])
   var site_list :List[ActorRef[Site.SiteCommands_Request]] = List()
   var feeds_list: List[String] = List()
 
-  override def onMessage(msg: SupervisorCommand): Behavior[SupervisorCommand] = {
+  override def onMessage(msg: SupervisorCommand):
+      Behavior[SupervisorCommand] = {
     msg match {
       case JsonSubs(name, feeds, url, url_Type) =>
         val new_site = context.spawn(
@@ -51,7 +50,7 @@ class Supervisor(context: ActorContext[Supervisor.SupervisorCommand])
         new_site ! Site.GetFeeds(url, url_Type, feeds, context.self)
 
         Behaviors.same
-      case Feed_Receive(feed) =>
+      case SendFeed(feed) =>
         feeds_list = feed :: feeds_list
         context.log.info("Feed[item:{}]: {}",feeds_list.length,feed)
         Behaviors.same
@@ -59,7 +58,8 @@ class Supervisor(context: ActorContext[Supervisor.SupervisorCommand])
     }
   }
 
-  override def onSignal: PartialFunction[Signal, Behavior[SupervisorCommand]] = {
+  override def onSignal: PartialFunction[Signal,
+    Behavior[SupervisorCommand]] = {
     case PostStop =>
       context.log.info("Supervisor Stopped")
       this

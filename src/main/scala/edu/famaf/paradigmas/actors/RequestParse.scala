@@ -1,48 +1,46 @@
 package edu.famaf.paradigmas
 
+import akka.actor.typed.Signal
 import akka.actor.typed.ActorRef
 import akka.actor.typed.Behavior
 import akka.actor.typed.PostStop
-import akka.actor.typed.Signal
-import akka.actor.typed.scaladsl.ActorContext
-import akka.actor.typed.scaladsl.AbstractBehavior
 import akka.actor.typed.scaladsl.Behaviors
 import akka.actor.typed.scaladsl.LoggerOps
+import akka.actor.typed.scaladsl.ActorContext
+import akka.actor.typed.scaladsl.AbstractBehavior
 
-
-
-object Request_Parse {
+object RequestParse {
   def apply(): Behavior[FeedCommands_Request] =
-    Behaviors.setup(context => new Request_Parse(context))
+    Behaviors.setup(context => new RequestParse(context))
 
-  /* Mensajes de Request_Parse */
+  /* Mensajes de RequestParse */
   sealed trait FeedCommands_Request
-  final case class Give_Parse(
+  final case class GiveToParse(
     url: String,
     url_Type: String,
     supervisor_ref: ActorRef[Supervisor.SupervisorCommand])
       extends FeedCommands_Request
 }
 
-class Request_Parse(context: ActorContext[Request_Parse.FeedCommands_Request])
-    extends AbstractBehavior[Request_Parse.FeedCommands_Request](context) {
-  context.log.info("Request_Parse Started")
+class RequestParse(context: ActorContext[RequestParse.FeedCommands_Request])
+    extends AbstractBehavior[RequestParse.FeedCommands_Request](context) {
+  context.log.info("RequestParse Started")
 
-  import Request_Parse._
+  import RequestParse._
 
-  override def onMessage(msg: FeedCommands_Request): Behavior[FeedCommands_Request] = {
+  override def onMessage(msg: FeedCommands_Request):
+      Behavior[FeedCommands_Request] = {
     msg match {
       // Creamos una tupla donde guardaremos la informacion de la url.
-      case Give_Parse(url, url_Type, supervisor_ref) =>
+      case GiveToParse(url, url_Type, supervisor_ref) =>
         var feed: String = ""
-        //
         url_Type match {
           case "rss" => val url_to_parse = new RSS_Parse
             feed = url_to_parse.parser(url).mkString(" ")
           case "reddit" => val url_to_parse = new REDDIT_Parse
             feed = url_to_parse.parser(url).mkString(" ")
         }
-        supervisor_ref ! Supervisor.Feed_Receive(feed)
+        supervisor_ref ! Supervisor.SendFeed(feed)
         Behaviors.same
     }
   }

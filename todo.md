@@ -9,15 +9,24 @@
     - [x] Plantear una nueva arquitectura
     - [x] Agregar diagrama de la nueva arquitectura
 - [x] Consigna 3
-  - [ ] Revisar
+  - [x] Revisar
 - [x] Consigna 4
-  - [ ] Revisar
+  - [x] Revisar
   - [x] Validar si es necesario cambiar `Give_Parse` a `GiveToParse`, de ser así, cambiarlo
+    - [x] Cambiarlo en `Supervisor.scala`
+    - [x] Cambiarlo en `Request_Parse.scala`
   - [x] Validar si es necesario cambiar `Feed_Receive` a `SendFeed`, de ser así, cambiarlo
+    - [x] Cambiarlo en `Supervisor.scala`
+    - [x] Cambiarlo en `Request_Parse.scala`
+  - [x] Validar si es necesario cambiar `Request_Parse` (tanto archivo como en el código) a `RequestParse`, de ser así, cambiarlo
+    - [x] Cambiarlo en `Request_Parse.scala`
+    - [x] Cambiarlo en `Site.scala`
 - [x] Consigna 5
-- [ ] Encontrar método para validación de los mensajes
+- [?] Encontrar método para validación de los mensajes
 - Puntos estrella
     - [x] Suscripción a Reddit/JSON*
+      - [x] Arreglar el bug con reddit
+      - [x] Arreglar el parseo cuando los feeds son vacíos
     - [ ] Conteo de Entidades Nombradas*
     - [ ] Guardar datos a disco**
     - [ ] Espera de proceso de datos**
@@ -25,3 +34,6 @@
 - [x] Redactar el informe
   - [x] Añadir las imágenes de las arquitecturas
   - [x] Explicar los problemas con la/las arquitectura
+- [ ] Añadir la tag a la branch de `master`
+  - [ ] git tag -a lab-3 -m "Entrega Laboratorio 3"
+- [-] Añadir branches para los puntos estrellas

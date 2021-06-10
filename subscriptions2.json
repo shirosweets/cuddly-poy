@@ -1,0 +1,20 @@
+[
+    {
+        "url": "https://www.chicagotribune.com/arcio/rss/category/%s/",
+        "feeds": ["business"],
+        "name": "chicagotribune",
+        "url_Type": "rss"
+    },
+    {
+        "url": "https://rss.nytimes.com/services/xml/rss/nyt/%s.xml",
+        "feeds": ["Business", "Technology"],
+        "name": "nytimes",
+        "url_Type": "rss"
+    },
+    {
+        "url": "https://www.reddit.com/r/Android/hot/.json?count=10",
+        "feeds": [],
+        "name": "reddit",
+        "url_Type": "reddit"
+    }
+]
